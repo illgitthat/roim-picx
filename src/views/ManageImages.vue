@@ -28,7 +28,6 @@
       </div>
     </transition-group>
   </div>
-  </div>
 </template>
 
 <script setup lang="ts">
