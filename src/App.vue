@@ -46,8 +46,8 @@ import { useRouter } from 'vue-router'
 import { ElScrollbar, ElConfigProvider } from 'element-plus'
 import en from "element-plus/es/locale/lang/en"
 
-const repoLink = 'https://blog.lianglianglee.com'
-const repoName = 'Muling Guardian'
+const repoLink = 'https://github.com/illgitthat/roim-picx'
+const repoName = 'roim-picx'
 const appName = 'Image Hosting Management Tool'
 
 document.title = appName
