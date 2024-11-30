@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto max-w-6xl my-4 px-4 relative">
     <div class="mx-auto max-w-2xl mt-10">
-      <el-input v-model="token" size="large" class="h-12" placeholder="Please enter the authentication token" show-password />
+      <el-input v-model="token" size="large" class="h-12" placeholder="Please enter the authentication token" show-password @keyup.enter="saveToken" />
       <el-button :loading="loading" class="mt-4 w-full lg:w-6xl" size="large" type="primary" @click="saveToken">Save</el-button>
     </div>
   </div>
