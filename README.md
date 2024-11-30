@@ -31,7 +31,7 @@
 5. Set environment variables
 
     1. `AUTH_TOKEN`: Authorization code
-    2. `COPY_URL`: Path to copy, if none, enter `https://domain.com/i`
+    2. `COPY_URL`: Path to copy, if none, enter `https://domain.com/rest`
 6. Bind R2
 
     1. Variable name: `R2`
