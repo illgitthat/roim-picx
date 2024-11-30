@@ -31,7 +31,6 @@
 						<font-awesome-icon :icon="faCopy" class="mr-2" />
 						Copy Link
 					</div>
-					</el-tooltip>
 					<el-divider direction="vertical" class="h-full" />
 					<el-popconfirm title="Are you sure you want to delete this image?" confirm-button-type="danger" @confirm="() => {
 						// (e: Event) => boolean ???
