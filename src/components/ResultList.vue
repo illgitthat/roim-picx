@@ -36,7 +36,7 @@ const activeName = ref('first')
 const htmlLinks = () => {
   let text = ''
   const length = props.imageList.length
-  for(let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const it = props.imageList[i]
     text += `<a href="${it.url}" target="_blank"><img src="${it.url}"></a>\n`
   }
@@ -45,7 +45,7 @@ const htmlLinks = () => {
 const viewLinks = () => {
   let text = ''
   const length = props.imageList.length
-  for(let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const it = props.imageList[i]
     text += `${it.url}\n`
   }
@@ -54,7 +54,7 @@ const viewLinks = () => {
 const markdownLinks = () => {
   let text = ''
   const length = props.imageList.length
-  for(let i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const it = props.imageList[i]
     text += `![${it.filename}](${it.url})\n`
   }
@@ -64,9 +64,9 @@ const copyLink = (event: any) => {
   // console.log(event.target.innerText)
   const res = copy(event.target.innerText)
   if (res) {
-    ElMessage.success('链接复制成功')
+    ElMessage.success('Link copied successfully')
   } else {
-    ElMessage.success('链接复制失败')
+    ElMessage.success('Link copy failed')
   }
 }
 const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -75,7 +75,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 </script>
 
 <style scoped>
-.demo-tabs > .el-tabs__content {
+.demo-tabs>.el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;

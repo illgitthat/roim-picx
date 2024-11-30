@@ -1,8 +1,8 @@
 <template>
   <div class="mx-auto max-w-6xl my-4 px-4 relative">
     <div class="mx-auto max-w-2xl mt-10">
-      <el-input v-model="token" size="large" class="h-12" placeholder="请输入认证Token" />
-      <el-button :loading="loading" class="mt-4 w-full lg:w-6xl" size="large" type="primary" @click="saveToken">保存</el-button>
+      <el-input v-model="token" size="large" class="h-12" placeholder="Please enter the authentication token" />
+      <el-button :loading="loading" class="mt-4 w-full lg:w-6xl" size="large" type="primary" @click="saveToken">Save</el-button>
     </div>
   </div>
 </template>
@@ -20,18 +20,18 @@ const saveToken = () => {
   loading.value = true
   if (!token.value) {
     loading.value = false
-    ElMessage.error('请输入token')
+    ElMessage.error('Please enter the token')
     return
   }
   checkToken({
     token: token.value
   }).then(res => {
     if (res) {
-      // 检测token是否有效
+      // Check if the token is valid
       storage.local.set('auth-token', token.value)
       router.push('/')
     } else {
-      ElMessage.error('Token无效')
+      ElMessage.error('Invalid token')
     }
   }).finally(() => {
     loading.value = false
@@ -40,6 +40,4 @@ const saveToken = () => {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

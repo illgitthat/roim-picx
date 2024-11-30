@@ -1,26 +1,24 @@
 <template>
 	<div class="mx-auto max-w-6xl my-4 px-4">
-		<div class="text-gray-800 text-lg">上传图片</div>
+		<div class="text-gray-800 text-lg">Upload Images</div>
 		<div class="mb-4 text-sm text-gray-500">
-			每张图片大小不超过 {{ formatBytes(imageSizeLimit) }}
+			Each image should not exceed {{ formatBytes(imageSizeLimit) }}
 		</div>
 
 		<div class="border-2 border-dashed border-slate-400 rounded-md relative">
 			<loading-overlay :loading="loading" />
 
 			<div class="grid p-4 gap-4 grid-cols-4 min-h-[240px]" @drop.prevent="onFileDrop" @dragover.prevent>
-				<div v-if="convertedImages.length === 0"
-					class="absolute -z-10 left-0 top-0 w-full h-full flex items-center justify-center">
+				<div v-if="convertedImages.length === 0" class="absolute -z-10 left-0 top-0 w-full h-full flex items-center justify-center">
 					<div class="text-gray-500">
 						<font-awesome-icon :icon="faCopy" />
-						粘贴或拖动图片至此处
+						Paste or drag images here
 					</div>
 				</div>
 
 				<transition-group name="el-fade-in-linear">
 					<div class="col-span-3 md:col-span-1" v-for="item in convertedImages" :key="item.tmpSrc">
-						<image-box :src="item.tmpSrc" :size="item.file.size" :name="item.file.name"
-							@delete="removeImage(item.tmpSrc)" mode="converted" />
+						<image-box :src="item.tmpSrc" :size="item.file.size" :name="item.file.name" @delete="removeImage(item.tmpSrc)" mode="converted" />
 					</div>
 				</transition-group>
 			</div>
@@ -31,13 +29,13 @@
 					'area-disabled': loading
 				}" @click="input?.click()">
 					<font-awesome-icon :icon="faImages" class="mr-2" />
-					选择图片
+					Select Images
 				</div>
 			</div>
 
 			<div class="md:col-span-4 col-span-8">
 				<div class="w-full h-10 bg-slate-200 leading-10 px-4 text-center md:text-left">
-					已选择 {{ convertedImages.length }} 张，共 {{ formatBytes(imagesTotalSize) }}
+					Selected {{ convertedImages.length }} images, total {{ formatBytes(imagesTotalSize) }}
 				</div>
 			</div>
 
@@ -46,7 +44,7 @@
 					'area-disabled': loading
 				}" @click="clearInput">
 					<font-awesome-icon :icon="faTrashAlt" class="mr-2" />
-					清除
+					Clear
 				</div>
 			</div>
 			<div class="md:col-span-1 col-span-3">
@@ -54,7 +52,7 @@
 					'area-disabled': loading
 				}" @click="clipboardUpload">
 					<font-awesome-icon :icon="faTrashAlt" class="mr-2" />
-					上传剪切板
+					Upload Clipboard
 				</div>
 			</div>
 			<div class="md:col-span-1 col-span-5">
@@ -62,12 +60,11 @@
 					'area-disabled': convertedImages.length === 0 || loading
 				}" @click="uploadImages">
 					<font-awesome-icon :icon="faUpload" class="mr-2" />
-					上传
+					Upload
 				</div>
 			</div>
 		</div>
-		<result-list v-show="imgResultList && imgResultList.length" :image-list="imgResultList" ref="resultList"
-			class="mt-4" />
+		<result-list v-show="imgResultList && imgResultList.length" :image-list="imgResultList" ref="resultList" class="mt-4" />
 	</div>
 
 	<input ref="input" type="file" accept="image/*" class="hidden" multiple @change="onInputChange" />
@@ -139,7 +136,7 @@ const clipboardUpload = () => {
 				});
 			} else {
 				ElMessage({
-					message: '剪切板中不是图片！',
+					message: 'Clipboard does not contain an image!',
 					type: 'warning',
 				})
 			}
@@ -157,7 +154,7 @@ const appendConvertedImages = async (files: FileList | null | undefined) => {
 		if (!file) return
 		if (file.size > imageSizeLimit) {
 			elNotify({
-				message: `${file.name} 文件过大`,
+				message: `${file.name} is too large`,
 				type: 'error'
 			})
 			continue
@@ -165,7 +162,7 @@ const appendConvertedImages = async (files: FileList | null | undefined) => {
 
 		if (!file.type.startsWith('image/')) {
 			elNotify({
-				message: `${file.name} 不是图片文件`,
+				message: `${file.name} is not an image file`,
 				type: 'error'
 			})
 			continue
@@ -198,8 +195,8 @@ const uploadImages = () => {
 	requestUploadImages(formData)
 		.then((res) => {
 			elNotify({
-				title: '上传完成',
-				message: `共 ${convertedImages.value.length} 张图片，${formatBytes(
+				title: 'Upload Complete',
+				message: `Total ${convertedImages.value.length} images, ${formatBytes(
 					imagesTotalSize.value
 				)}`,
 				type: 'success'

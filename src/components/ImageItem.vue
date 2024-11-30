@@ -7,16 +7,7 @@
     </template>
     <div class="text item">
       <div class="lg:flex items-center justify-start">
-        <el-image
-            class="block w-48 h-48 lg:mr-6 mb-2 lg:mb-0 mx-auto"
-            :src="it.url"
-            fit="cover"
-            hide-on-click-modal
-            lazy
-            @error="imageError = true"
-            @load="loading = false"
-            :preview-src-list="[it.url]"
-        />
+        <el-image class="block w-48 h-48 lg:mr-6 mb-2 lg:mb-0 mx-auto" :src="it.url" fit="cover" hide-on-click-modal lazy @error="imageError = true" @load="loading = false" :preview-src-list="[it.url]" />
         <div class="link-list">
           <div class="w-full mb-2">
             <label for="htmlLink" class="block text-sm font-medium text-gray-700"> HTML </label>
@@ -63,9 +54,9 @@ const copyLink = (event: any) => {
   // console.log(event.target.value)
   const res = copy(event.target.value)
   if (res) {
-    ElMessage.success('链接复制成功')
+    ElMessage.success('Link copied successfully')
   } else {
-    ElMessage.success('链接复制失败')
+    ElMessage.success('Link copy failed')
   }
 }
 </script>
@@ -74,7 +65,8 @@ const copyLink = (event: any) => {
 .link-list {
   width: calc(100% - 13.5rem);
 }
-@media screen and (max-width: 1024px){
+
+@media screen and (max-width: 1024px) {
   .link-list {
     width: 100%;
   }
