@@ -1,5 +1,5 @@
 <template>
-	<el-config-provider :locale="zhCn">
+	<el-config-provider :locale="en">
 		<div class="w-full h-screen overflow-x-hidden overflow-y-auto">
 			<el-scrollbar>
 				<div class="w-full h-16 bg-rose-100/50 shadow-sm sticky left-0 top-0 backdrop-blur-sm z-10">
@@ -44,7 +44,7 @@
 import { faCog, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'vue-router'
 import { ElScrollbar, ElConfigProvider } from 'element-plus'
-import zhCn from "element-plus/es/locale/lang/zh-cn"
+import en from "element-plus/es/locale/lang/en"
 
 const repoLink = 'https://blog.lianglianglee.com'
 const repoName = 'Muling Guardian'
