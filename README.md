@@ -1,42 +1,42 @@
 # roim-picx
 
-### 一款基于Cloudflare的Worker、R2、Pages实现的图床应用，具有以下特点：
+### An image hosting application based on Cloudflare's Worker, R2, and Pages with the following features:
 
-* 10GB的免费存储空间
-* 每月300W次的不计流量的图片访问，每天10W的限制。
-* 每月100W次的图片上传次数
-* 不需要自己购买服务器，克隆代码后部署CloudFlare即可使用。
-* 独立部署不需要担心被第三方删除数据。
+* 10GB of free storage space
+* 3 million image accesses per month without traffic counting, with a daily limit of 100,000.
+* 1 million image uploads per month
+* No need to purchase your own server, just clone the code and deploy on Cloudflare.
+* Independent deployment without worrying about third-party data deletion.
 
-### 已实现功能
+### Features Implemented
 
-* 图片批量上传
-* 图片列表查询
-* 图片删除
-* 目录创建
-* 按目录查询
-* 链接地址点击复制
-* 简单的身份认证功能，进入管理页面需要授权
+* Batch image upload
+* Image list query
+* Image deletion
+* Directory creation
+* Query by directory
+* Click to copy link address
+* Simple authentication function, authorization required to enter the management page
 
-### 使用教程
+### Usage Tutorial
 
-1. fork项目到自己的github
-2. 创建Page项目
-3. 输入编译参数
+1. Fork the project to your own GitHub
+2. Create a Pages project
+3. Enter build parameters
 
-    1. 框架预设：无
-    2. 构建命令：`npm run build`
-    3. 输出目录：`dist`
-4. 完成创建
-5. 设置环境变量
+    1. Framework preset: None
+    2. Build command: `npm run build`
+    3. Output directory: `dist`
+4. Complete the creation
+5. Set environment variables
 
-    1. `AUTH_TOKEN`：授权码
-    2. `COPY_URL`：复制的路径，如无，则输入`page域名/rest`
-6. 绑定R2
+    1. `AUTH_TOKEN`: Authorization code
+    2. `COPY_URL`: Path to copy, if none, enter `https://domain.com/i`
+6. Bind R2
 
-    1. 变量名为：`R2`
-7. 重新部署
+    1. Variable name: `R2`
+7. Redeploy
 
 ---
 
-项目fork自[roimdev/roim-picx](https://github.com/roimdev/roim-picx)
+Project forked from [roimdev/roim-picx](https://github.com/roimdev/roim-picx) and [liangliangle/roim-picx](https://github.com/liangliangle/roim-picx)
