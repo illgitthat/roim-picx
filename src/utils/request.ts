@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ElNotification as elNotify } from 'element-plus'
-import {ImgList, ImgDel, ImgReq, Folder, ImgItem, AuthToken} from "./types"
+import { ImgList, ImgDel, ImgReq, Folder, ImgItem, AuthToken } from "./types"
 import storage from "./storage"
 const request = axios.create({
 	baseURL: import.meta.env.VITE_APP_API_URL,
@@ -49,8 +49,8 @@ request.interceptors.response.use(
 	}
 )
 
-export const requestListImages = (data : ImgReq): Promise<ImgList> => request.post('/rest/list', data)
-export const requestUploadImages = (data: FormData) : Promise<ImgItem[]> => request.post('/rest/upload', data)
-export const createFolder = (data: Folder) => request.post('/rest/folder', data)
-export const checkToken = (data: AuthToken) => request.post('/rest/checkToken', data)
-export const requestDeleteImage = (data: ImgDel) => request.delete('/rest', { data })
+export const requestListImages = (data: ImgReq): Promise<ImgList> => request.post('/i/list', data)
+export const requestUploadImages = (data: FormData): Promise<ImgItem[]> => request.post('/i/upload', data)
+export const createFolder = (data: Folder) => request.post('/i/folder', data)
+export const checkToken = (data: AuthToken) => request.post('/i/checkToken', data)
+export const requestDeleteImage = (data: ImgDel) => request.delete('/i', { data })
