@@ -1,0 +1,16 @@
+name = "roim-picx"
+
+# Required for Pages to pick up this config
+pages_build_output_dir = "./dist"
+
+# Use a recent, stable compatibility date
+compatibility_date = "2024-04-03"
+
+# Enable Node.js core module shims in Workers runtime
+compatibility_flags = ["nodejs_compat"]
+
+# If you bind resources like R2/ KV/ D1, define them here or in the Pages dashboard.
+# Example (uncomment and adjust bucket_name to your actual bucket):
+# r2_buckets = [
+#   { binding = "R2", bucket_name = "your-r2-bucket" }
+# ]
