@@ -25,12 +25,10 @@
 		</div>
 		<div class="w-full rounded-md shadow-sm overflow-hidden mt-4 grid grid-cols-8">
 			<div class="md:col-span-1 col-span-8">
-				<div class="w-full h-10 bg-blue-500 cursor-pointer flex items-center justify-center text-white" :class="{
-					'area-disabled': loading
-				}" @click="input?.click()">
+				<button type="button" class="flex h-10 w-full items-center justify-center bg-blue-500 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60" :disabled="loading" @click="input?.click()">
 					<font-awesome-icon :icon="faImages" class="mr-2" />
 					Select Images
-				</div>
+				</button>
 			</div>
 
 			<div class="md:col-span-4 col-span-8">
@@ -40,29 +38,26 @@
 			</div>
 
 			<div class="md:col-span-1 col-span-3">
-				<div class="w-full bg-red-500 cursor-pointer h-10 flex items-center justify-center text-white" :class="{
-					'area-disabled': loading
-				}" @click="clearInput">
+				<button type="button" class="flex h-10 w-full items-center justify-center bg-red-500 text-white hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60" :disabled="loading || convertedImages.length === 0" @click="clearInput">
 					<font-awesome-icon :icon="faTrashAlt" class="mr-2" />
 					Clear
-				</div>
+				</button>
 			</div>
 			<div class="md:col-span-1 col-span-3">
-				<div class="w-full bg-sky-500  cursor-pointer h-10 flex items-center justify-center text-white" :class="{
-					'area-disabled': loading
-				}" @click="clipboardUpload">
+				<button type="button" class="flex h-10 w-full items-center justify-center bg-sky-500 text-white hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-60" :disabled="loading" @click="clipboardUpload">
 					<font-awesome-icon :icon="faTrashAlt" class="mr-2" />
 					Upload Clipboard
-				</div>
+				</button>
 			</div>
 			<div class="md:col-span-1 col-span-5">
-				<div class="w-full h-10 flex items-center justify-center text-white bg-green-500 cursor-pointer" :class="{
-					'area-disabled': convertedImages.length === 0 || loading
-				}" @click="uploadImages">
+				<button type="button" class="flex h-10 w-full items-center justify-center bg-green-500 text-white hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-60" :disabled="convertedImages.length === 0 || loading" @click="uploadImages">
 					<font-awesome-icon :icon="faUpload" class="mr-2" />
-					Upload
-				</div>
+					{{ loading ? 'Working...' : 'Upload' }}
+				</button>
 			</div>
+		</div>
+		<div v-if="uploadError" class="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
+			{{ uploadError }}
 		</div>
 		<result-list v-show="imgResultList && imgResultList.length" :image-list="imgResultList" ref="resultList" class="mt-4" />
 	</div>
@@ -73,12 +68,11 @@
 <script setup lang="ts">
 import { faImages, faTrashAlt, faCopy } from '@fortawesome/free-regular-svg-icons'
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
-import { computed, onMounted, onUnmounted, ref, h } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import LoadingOverlay from '../components/LoadingOverlay.vue'
 import formatBytes from '../utils/format-bytes'
 import { ElNotification as elNotify, ElMessage } from 'element-plus'
-import { requestUploadImages } from '../utils/request'
-import { useRouter } from 'vue-router'
+import { requestUploadImages, getRequestErrorMessage } from '../utils/request'
 import ImageBox from '../components/ImageBox.vue'
 import ResultList from '../components/ResultList.vue'
 import type { ConvertedImage, ImgItem } from '../utils/types'
@@ -91,15 +85,18 @@ const imagesTotalSize = computed(() =>
 const imageSizeLimit = 20 * 1024 * 1024
 const input = ref<HTMLInputElement>()
 const loading = ref(false)
-const router = useRouter()
+const uploadError = ref('')
 
-const onInputChange = () => {
-	appendConvertedImages(input.value?.files)
+const onInputChange = async () => {
+	await appendConvertedImages(input.value?.files)
+	if (input.value) input.value.value = ''
 }
 const onFileDrop = (e: DragEvent) => {
+	if (loading.value) return
 	appendConvertedImages(e.dataTransfer?.files)
 }
 const onPaste = (e: ClipboardEvent) => {
+	if (loading.value) return
 	appendConvertedImages(e.clipboardData?.files)
 }
 
@@ -112,71 +109,95 @@ onUnmounted(() => {
 	convertedImages.value.forEach((item) => URL.revokeObjectURL(item.tmpSrc))
 })
 
-const clearInput = () => {
+const clearConvertedImages = () => {
+	convertedImages.value.forEach((item) => URL.revokeObjectURL(item.tmpSrc))
 	convertedImages.value = []
-	imgResultList.value = []
+	if (input.value) input.value.value = ''
 }
 
-const clipboardUpload = () => {
-	navigator.clipboard.read().then(clipboardContents => {
+const clearInput = () => {
+	if (loading.value) return
+	clearConvertedImages()
+	imgResultList.value = []
+	uploadError.value = ''
+}
+
+const clipboardUpload = async () => {
+	if (loading.value) return
+
+	uploadError.value = ''
+	loading.value = true
+	try {
+		if (!navigator.clipboard?.read) {
+			throw new Error('Clipboard image access is not supported by this browser.')
+		}
+
+		const clipboardContents = await navigator.clipboard.read()
+		let foundImage = false
 		for (const item of clipboardContents) {
 			if (item.types.includes("image/png")) {
-
-				item.getType("image/png").then(blob => {
-					const file = new File([blob], "clipboard.png", {
-						type: "image/png",
-					});
-					convertedImages.value = [
-						...convertedImages.value,
-						{
-							file,
-							tmpSrc: URL.createObjectURL(file)
-						}
-					]
-				});
-			} else {
-				ElMessage({
-					message: 'Clipboard does not contain an image!',
-					type: 'warning',
+				foundImage = true
+				const blob = await item.getType("image/png")
+				const file = new File([blob], "clipboard.png", {
+					type: "image/png",
 				})
+				convertedImages.value = [
+					...convertedImages.value,
+					{
+						file,
+						tmpSrc: URL.createObjectURL(file)
+					}
+				]
 			}
 		}
-	});
-
+		if (!foundImage) {
+			ElMessage.warning('Clipboard does not contain a PNG image.')
+		}
+	} catch (error) {
+		uploadError.value = error instanceof Error
+			? error.message
+			: 'Unable to read an image from the clipboard.'
+	} finally {
+		loading.value = false
+	}
 }
 
 const appendConvertedImages = async (files: FileList | null | undefined) => {
-	if (!files) return
+	if (!files || loading.value) return
 
+	uploadError.value = ''
 	loading.value = true
-	for (let i = 0; i < files.length; i++) {
-		const file = files.item(i)
-		if (!file) return
-		if (file.size > imageSizeLimit) {
-			elNotify({
-				message: `${file.name} is too large`,
-				type: 'error'
-			})
-			continue
-		}
-
-		if (!file.type.startsWith('image/')) {
-			elNotify({
-				message: `${file.name} is not an image file`,
-				type: 'error'
-			})
-			continue
-		}
-
-		convertedImages.value = [
-			...convertedImages.value,
-			{
-				file,
-				tmpSrc: URL.createObjectURL(file)
+	try {
+		for (let i = 0; i < files.length; i++) {
+			const file = files.item(i)
+			if (!file) continue
+			if (file.size > imageSizeLimit) {
+				elNotify({
+					message: `${file.name} is too large`,
+					type: 'error'
+				})
+				continue
 			}
-		]
+
+			if (!file.type.startsWith('image/')) {
+				elNotify({
+					message: `${file.name} is not an image file`,
+					type: 'error'
+				})
+				continue
+			}
+
+			convertedImages.value = [
+				...convertedImages.value,
+				{
+					file,
+					tmpSrc: URL.createObjectURL(file)
+				}
+			]
+		}
+	} finally {
+		loading.value = false
 	}
-	loading.value = false
 }
 
 const removeImage = (tmpSrc: string) => {
@@ -184,32 +205,32 @@ const removeImage = (tmpSrc: string) => {
 	URL.revokeObjectURL(tmpSrc)
 }
 
-const uploadImages = () => {
-	loading.value = true
+const uploadImages = async () => {
+	if (loading.value || convertedImages.value.length === 0) return
 
+	uploadError.value = ''
+	loading.value = true
 	const formData = new FormData()
 	for (let item of convertedImages.value) {
 		formData.append('files', item.file)
 	}
+	const imageCount = convertedImages.value.length
+	const totalSize = imagesTotalSize.value
 
-	requestUploadImages(formData)
-		.then((res) => {
-			elNotify({
-				title: 'Upload Complete',
-				message: `Total ${convertedImages.value.length} images, ${formatBytes(
-					imagesTotalSize.value
-				)}`,
-				type: 'success'
-			})
-			convertedImages.value = []
-			imgResultList.value = res
-			// console.log(res)
-			// router.push('/')
+	try {
+		const res = await requestUploadImages(formData)
+		elNotify({
+			title: 'Upload Complete',
+			message: `Total ${imageCount} images, ${formatBytes(totalSize)}`,
+			type: 'success'
 		})
-		.catch(() => { })
-		.finally(() => {
-			loading.value = false
-		})
+		clearConvertedImages()
+		imgResultList.value = res
+	} catch (error) {
+		uploadError.value = getRequestErrorMessage(error) || 'The upload could not be completed. Please try again.'
+	} finally {
+		loading.value = false
+	}
 }
 </script>
 

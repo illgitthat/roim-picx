@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick" type="border-card">
+  <el-tabs v-model="activeName" class="demo-tabs" type="border-card">
     <el-tab-pane label="Preview" name="first">
       <image-item :image-list="imageList" ref="imageItem" />
     </el-tab-pane>
@@ -22,9 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { ElCard, ElImage, ElMessage, ElTabs, ElTabPane } from 'element-plus'
+import { ElMessage, ElTabs, ElTabPane } from 'element-plus'
 import { ref } from 'vue'
-import type { TabsPaneContext } from 'element-plus'
 import ImageItem from '../components/ImageItem.vue'
 import type { ImgItem } from '../utils/types'
 import copy from 'copy-to-clipboard'
@@ -60,17 +59,14 @@ const markdownLinks = () => {
   }
   return text
 }
-const copyLink = (event: any) => {
-  // console.log(event.target.innerText)
-  const res = copy(event.target.innerText)
+const copyLink = (event: MouseEvent) => {
+  const text = (event.currentTarget as HTMLElement).innerText
+  const res = copy(text)
   if (res) {
     ElMessage.success('Link copied successfully')
   } else {
-    ElMessage.success('Link copy failed')
+    ElMessage.error('Link copy failed')
   }
-}
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  // console.log(tab, event)
 }
 </script>
 
