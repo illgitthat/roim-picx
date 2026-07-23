@@ -38,7 +38,7 @@ import type { ImgItem } from '../utils/types'
 import copy from 'copy-to-clipboard'
 import { ElCard, ElImage, ElMessage } from 'element-plus'
 import { ref } from 'vue'
-const props = defineProps<{
+defineProps<{
   imageList: ImgItem[]
 }>()
 const imageError = ref(false)
@@ -50,13 +50,13 @@ const htmlLink = (link: String, filename: String) => {
   return `<a href="${link}" target="_blank" title="${filename}"><img src="${link}"></a>`
 }
 
-const copyLink = (event: any) => {
-  // console.log(event.target.value)
-  const res = copy(event.target.value)
+const copyLink = (event: MouseEvent) => {
+  const value = (event.currentTarget as HTMLInputElement).value
+  const res = copy(value)
   if (res) {
     ElMessage.success('Link copied successfully')
   } else {
-    ElMessage.success('Link copy failed')
+    ElMessage.error('Link copy failed')
   }
 }
 </script>

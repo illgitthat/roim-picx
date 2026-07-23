@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full bg-rose-100 rounded-md shadow-sm overflow-hidden relative">
-		<loading-overlay :loading="loading" />
+		<loading-overlay :loading="loading || deleting" />
 
 		<el-image class="block w-full h-40 lg:h-60" :src="src" fit="cover" hide-on-click-modal @load="loading = false" />
 		<div class="w-full absolute left-0 bottom-0 bg-slate-800/70 backdrop-blur-sm">
@@ -27,20 +27,14 @@
 				<el-divider class="m-0" />
 				<div class="w-full flex text-white h-9 text-center text-sm">
 					<el-tooltip :content="copyUrl" placement="top-start"></el-tooltip>
-					<div class="flex-1 flex items-center justify-center cursor-pointer" @click="copyLink(copyUrl)">
+					<div class="flex-1 flex items-center justify-center cursor-pointer" @click="copyUrl && copyLink(copyUrl)">
 						<font-awesome-icon :icon="faCopy" class="mr-2" />
 						Copy Link
 					</div>
 					<el-divider direction="vertical" class="h-full" />
-					<el-popconfirm title="Are you sure you want to delete this image?" confirm-button-type="danger" @confirm="() => {
-						// (e: Event) => boolean ???
-						loading = true
-						emit('delete')
-						return true
-					}
-						">
+					<el-popconfirm :disabled="deleting" title="Are you sure you want to delete this image?" confirm-button-type="danger" @confirm="emit('delete')">
 						<template #reference>
-							<div class="flex-1 flex items-center justify-center cursor-pointer">
+							<div class="flex-1 flex items-center justify-center" :class="deleting ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'">
 								<font-awesome-icon :icon="faTrashAlt" class="mr-2" />
 								Delete
 							</div>
@@ -62,12 +56,13 @@ import LoadingOverlay from '../components/LoadingOverlay.vue'
 
 const props = defineProps<{
 	src: string
-	copyUrl: string
+	copyUrl?: string
 	name: string
 	size: number
 	mode: 'converted' | 'uploaded'
 	uploadedAt?: number
 	expiresAt?: number
+	deleting?: boolean
 }>()
 const emit = defineEmits(['delete'])
 
@@ -78,7 +73,7 @@ const copyLink = (link: string) => {
 	if (res) {
 		ElMessage.success('Link copied successfully')
 	} else {
-		ElMessage.success('Link copy failed')
+		ElMessage.error('Link copy failed')
 	}
 }
 </script>
