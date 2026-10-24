@@ -23,7 +23,7 @@
 				</transition-group>
 			</div>
 		</div>
-		<div class="w-full rounded-md shadow-sm overflow-hidden mt-4 grid grid-cols-8">
+		<div class="w-full rounded-md shadow-xs overflow-hidden mt-4 grid grid-cols-8">
 			<div class="md:col-span-1 col-span-8">
 				<button type="button" class="flex h-10 w-full items-center justify-center bg-blue-500 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60" :disabled="loading" @click="input?.click()">
 					<font-awesome-icon :icon="faImages" class="mr-2" />

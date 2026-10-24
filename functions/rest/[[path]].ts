@@ -1,4 +1,4 @@
-import { error } from 'itty-router-extras';
+import { error } from 'itty-router';
 
 export interface Env {
   AUTH_TOKEN: string
@@ -13,7 +13,7 @@ export const onRequest: PagesFunction<Env> = async (context : EventContext) => {
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const response: Response | undefined = await router.handle(context.request, context.env);
+    const response: Response | undefined = await router.fetch(context.request, context.env);
     return response ?? error(404, 'not found');
   } catch (err) {
     return error(500, (err as Error).message);
