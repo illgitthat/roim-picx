@@ -1,6 +1,6 @@
 import { router } from '../router';
 import { Env } from '../[[path]]'
-import { json } from 'itty-router-extras';
+import { json } from 'itty-router';
 import StatusCode, { Ok, Fail, Build, ImgItem, ImgList, ImgReq, Folder, AuthToken, FailCode, NotAuth } from "../type";
 import { checkFileType, getFilePath, parseRange } from '../utils'
 import { R2ListOptions } from "@cloudflare/workers-types";

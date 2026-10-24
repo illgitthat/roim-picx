@@ -1,9 +1,9 @@
 <template>
-	<div class="w-full bg-rose-100 rounded-md shadow-sm overflow-hidden relative">
+	<div class="w-full bg-rose-100 rounded-md shadow-xs overflow-hidden relative">
 		<loading-overlay :loading="loading || deleting" />
 
 		<el-image class="block w-full h-40 lg:h-60" :src="src" fit="cover" hide-on-click-modal @load="loading = false" />
-		<div class="w-full absolute left-0 bottom-0 bg-slate-800/70 backdrop-blur-sm">
+		<div class="w-full absolute left-0 bottom-0 bg-slate-800/70 backdrop-blur-xs">
 			<div class="p-2">
 				<div class="w-full flex items-center text-white">
 					<div class="flex-1 w-full truncate">

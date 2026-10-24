@@ -20,7 +20,7 @@
     </div>
 
     <div v-if="prefixes.length" class="my-3 flex flex-wrap items-center gap-2">
-      <button v-for="it in prefixes" :key="it" type="button" class="flex max-w-full items-center rounded-lg bg-white px-3 py-2 shadow-sm transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50" :disabled="loading || loadingMore" @click="changeFolder(it)">
+      <button v-for="it in prefixes" :key="it" type="button" class="flex max-w-full items-center rounded-lg bg-white px-3 py-2 shadow-xs transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50" :disabled="loading || loadingMore" @click="changeFolder(it)">
         <font-awesome-icon :icon="faFolder" class="shrink-0 text-2xl text-amber-500" />
         <span class="truncate pl-2 text-sm text-gray-600">{{ it === '/' ? it : it.replaceAll('/', '') }}</span>
       </button>
